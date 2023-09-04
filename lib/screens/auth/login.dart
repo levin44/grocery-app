@@ -3,9 +3,11 @@ import 'package:flutter_social_button/flutter_social_button.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
+import 'package:grocery_app/screens/auth/signup.dart';
 import 'package:grocery_app/screens/main/main_screen.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
+import 'package:grocery_app/utils/helper/alert_helper.dart';
 import 'package:logger/logger.dart';
 
 class Login extends StatefulWidget {
@@ -71,7 +73,7 @@ class _LoginState extends State<Login> {
                   onTap: () {
                     // Logger().i(_email.text);
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MainScreen()));
+                        MaterialPageRoute(builder: (context) => Signup()));
                   },
                   text: "Login",
                 ),
@@ -104,5 +106,25 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  //validate text inputs
+  bool validateFields() {
+    if (_password.text.isEmpty || _email.text.isEmpty) {
+      Logger().w("fill all");
+      AlertHelper.showAlert(context, "fill all");
+      return false;
+    } else if (!_email.text.contains("@")) {
+      Logger().w("please enter valid email");
+      AlertHelper.showAlert(context, "enter valid email");
+      return false;
+    } else if (_password.text.length < 6) {
+      Logger().w("password need 6 digits");
+      AlertHelper.showAlert(context, "password need 6 digits");
+      return false;
+    } else {
+      Logger().w("all good");
+      return true;
+    }
   }
 }

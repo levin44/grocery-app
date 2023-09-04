@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_text.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/screens/auth/forgot_password.dart';
 import 'package:grocery_app/screens/auth/login.dart';
 import 'package:grocery_app/screens/auth/signup.dart';
 import 'package:grocery_app/state_management/screen_one.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,10 +21,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Login()),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => Login()),
+      // );
+      Provider.of<AuthProvider>(context, listen: false).initializeUser(context);
     });
   }
 

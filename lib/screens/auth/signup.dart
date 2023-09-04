@@ -1,9 +1,15 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
+import 'package:grocery_app/controllers/auth_controller.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
+import 'package:grocery_app/utils/helper/alert_helper.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -13,9 +19,6 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  final _email = TextEditingController();
-  final _name = TextEditingController();
-  final _password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -47,17 +50,17 @@ class _SignupState extends State<Signup> {
                 ),
                 SizedBox(height: 21),
                 customTextfield(
-                  controller: _name,
+                  controller: Provider.of<AuthProvider>(context).name,
                   hintText: 'Name',
                 ),
                 SizedBox(height: 8),
                 customTextfield(
-                  controller: _email,
+                  controller: Provider.of<AuthProvider>(context).email,
                   hintText: 'Email',
                 ),
                 SizedBox(height: 8),
                 customTextfield(
-                  controller: _password,
+                  controller: Provider.of<AuthProvider>(context).password,
                   hintText: 'Password',
                   obscureText: true,
                 ),
@@ -75,9 +78,16 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 SizedBox(height: 29),
-                CustomButton(
-                  onTap: () {},
-                  text: "SignUp",
+                Consumer<AuthProvider>(
+                  builder: (context, value, child) {
+                    return CustomButton(
+                      isLoading: value.isLoading,
+                      onTap: () {
+                        value.startSignup(context);
+                      },
+                      text: "SignUp",
+                    );
+                  },
                 ),
               ],
             ),

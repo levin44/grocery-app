@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/firebase_options.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/screens/splash/splash_screen.dart';
 import 'package:grocery_app/state_management/providers/counter_provider.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => CounterProvider()),
+      ChangeNotifierProvider(create: (context) => AuthProvider()),
     ],
     child: const MyApp(),
   ));

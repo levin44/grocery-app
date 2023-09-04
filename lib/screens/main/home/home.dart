@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_text.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/screens/main/product_details/product_details.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,7 +28,12 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(AssetsConstants.menuIcon),
-                Image.asset(AssetsConstants.cartIcon),
+                InkWell(
+                  onTap: () {
+                    Provider.of<AuthProvider>(context, listen: false).logOut();
+                  },
+                  child: Image.asset(AssetsConstants.cartIcon),
+                ),
               ],
             ),
             SizedBox(height: 25),
