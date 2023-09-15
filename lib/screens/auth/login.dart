@@ -3,12 +3,15 @@ import 'package:flutter_social_button/flutter_social_button.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/screens/auth/forgot_password.dart';
 import 'package:grocery_app/screens/auth/signup.dart';
 import 'package:grocery_app/screens/main/main_screen.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:grocery_app/utils/helper/alert_helper.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -18,8 +21,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _email = TextEditingController();
-  final _password = TextEditingController();
+  // final _email = TextEditingController();
+  // final _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +49,12 @@ class _LoginState extends State<Login> {
                 ),
                 SizedBox(height: 21),
                 customTextfield(
-                  controller: _email,
+                  controller: Provider.of<AuthProvider>(context).loginemail,
                   hintText: 'email',
                 ),
                 SizedBox(height: 8),
                 customTextfield(
-                  controller: _password,
+                  controller: Provider.of<AuthProvider>(context).loginPassword,
                   hintText: 'password',
                   obscureText: true,
                 ),
@@ -59,7 +62,13 @@ class _LoginState extends State<Login> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPassword()),
+                      );
+                    },
                     child: CustomText(
                       'Forgot your password?',
                       color: Color(0xFF222222),
@@ -69,13 +78,16 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 SizedBox(height: 29),
-                CustomButton(
-                  onTap: () {
-                    // Logger().i(_email.text);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Signup()));
+                Consumer<AuthProvider>(
+                  builder: (context, value, child) {
+                    return CustomButton(
+                      isLoading: value.isLoading,
+                      onTap: () {
+                        value.startLogin(context);
+                      },
+                      text: "Login",
+                    );
                   },
-                  text: "Login",
                 ),
                 SizedBox(height: 23),
                 CustomText(
@@ -106,25 +118,5 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-  }
-
-  //validate text inputs
-  bool validateFields() {
-    if (_password.text.isEmpty || _email.text.isEmpty) {
-      Logger().w("fill all");
-      AlertHelper.showAlert(context, "fill all");
-      return false;
-    } else if (!_email.text.contains("@")) {
-      Logger().w("please enter valid email");
-      AlertHelper.showAlert(context, "enter valid email");
-      return false;
-    } else if (_password.text.length < 6) {
-      Logger().w("password need 6 digits");
-      AlertHelper.showAlert(context, "password need 6 digits");
-      return false;
-    } else {
-      Logger().w("all good");
-      return true;
-    }
   }
 }

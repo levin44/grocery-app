@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
+import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -47,12 +49,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 fontSize: 14,
               ),
               SizedBox(height: 16),
-              customTextfield(controller: _email, hintText: 'Email'),
-              SizedBox(height: 68),
-              CustomButton(
-                onTap: () {},
-                text: "Send",
+              customTextfield(
+                controller: Provider.of<AuthProvider>(context).resetEmail,
+                hintText: 'Email',
               ),
+              SizedBox(height: 68),
+              Consumer<AuthProvider>(builder: (context, value, child) {
+                return CustomButton(
+                  onTap: () {
+                    value.sendPasswordResetEmail(context);
+                  },
+                  isLoading: value.isLoading,
+                  text: "Send",
+                );
+              }),
             ],
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
 import 'package:grocery_app/controllers/auth_controller.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/screens/auth/login.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:grocery_app/utils/helper/alert_helper.dart';
@@ -68,7 +69,12 @@ class _SignupState extends State<Signup> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Login()));
+                    },
                     child: CustomText(
                       'Already have an account?',
                       color: Color(0xFF222222),

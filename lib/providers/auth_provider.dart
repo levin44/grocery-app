@@ -54,9 +54,13 @@ class AuthProvider extends ChangeNotifier {
         //start loader
         setLoading(true);
         await _authController
-            .signupUser(context, _email.text, _password.text)
+            .signupUser(context, _email.text, _password.text, _name.text)
             .then(
           (value) {
+            //clear the controllers
+            _email.clear();
+            _name.clear();
+            _password.clear();
             //stop the loader
             setLoading(false);
           },
@@ -87,5 +91,84 @@ class AuthProvider extends ChangeNotifier {
   //signout function
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+//login feature
+
+//validate login feature
+  bool validateLoginFields(BuildContext context) {
+    if (_loginPassword.text.isEmpty || _loginemail.text.isEmpty) {
+      Logger().w("fill all");
+      AlertHelper.showAlert(context, "fill all");
+      return false;
+    } else if (!_loginemail.text.contains("@")) {
+      Logger().w("please enter valid email");
+      AlertHelper.showAlert(context, "enter valid email");
+      return false;
+    } else if (_loginPassword.text.length < 6) {
+      Logger().w("password need 6 digits");
+      AlertHelper.showAlert(context, "password need 6 digits");
+      return false;
+    } else {
+      Logger().w("all good");
+      return true;
+    }
+  }
+
+  final _loginemail = TextEditingController();
+  TextEditingController get loginemail => _loginemail;
+  final _loginPassword = TextEditingController();
+  TextEditingController get loginPassword => _loginPassword;
+//start the login process
+
+  Future<void> startLogin(BuildContext context) async {
+    try {
+      //validating the inputs
+      if (validateLoginFields(context)) {
+        //start loader
+        setLoading(true);
+        await _authController
+            .loginUser(context, _loginemail.text, _loginPassword.text)
+            .then(
+          (value) {
+            //clear the controllers
+            _email.clear();
+            _password.clear();
+            //stop the loader
+            setLoading(false);
+          },
+        );
+      }
+    } catch (e) {
+      Logger().e(e);
+      setLoading(false);
+      AlertHelper.showAlert(context, e.toString());
+    }
+  }
+
+  // reset user password
+  final _resetEmail = TextEditingController();
+  TextEditingController get resetEmail => _resetEmail;
+
+  Future<void> sendPasswordResetEmail(BuildContext context) async {
+    try {
+      //validating the inputs
+      if (_resetEmail.text.isNotEmpty) {
+        //start loader
+        setLoading(true);
+        await _authController.sendEmail(context, _resetEmail.text).then(
+          (value) {
+            //clear the controllers
+            _resetEmail.clear();
+
+            //stop the loader
+            setLoading(false);
+          },
+        );
+      }
+    } catch (e) {
+      Logger().e(e);
+      setLoading(false);
+      AlertHelper.showAlert(context, e.toString());
+    }
   }
 }
