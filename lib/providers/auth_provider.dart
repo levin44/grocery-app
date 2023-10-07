@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,10 @@ import 'package:grocery_app/controllers/auth_controller.dart';
 import 'package:grocery_app/screens/auth/signup.dart';
 import 'package:grocery_app/screens/main/main_screen.dart';
 import 'package:grocery_app/utils/helper/alert_helper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+
+import '../models/user_model.dart';
 
 class AuthProvider extends ChangeNotifier {
   AuthController _authController = AuthController();
@@ -75,15 +80,19 @@ class AuthProvider extends ChangeNotifier {
 
   //initialized the user and listen to the authstateChanges
   Future<void> initializeUser(BuildContext context) async {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         Logger().w('User is currently signed out!');
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Signup()));
       } else {
-        Logger().w('User is signed in!');
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MainScreen()));
+        await startFetchUserData(context, user.uid).then(
+          (value) {
+            Logger().w('User is signed in!');
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainScreen()));
+          },
+        );
       }
     });
   }
@@ -169,6 +178,78 @@ class AuthProvider extends ChangeNotifier {
       Logger().e(e);
       setLoading(false);
       AlertHelper.showAlert(context, e.toString());
+    }
+  }
+
+  // usermodel object to store user object
+  UserModel? _userModel;
+  UserModel? get usermodel => _userModel;
+
+  //start fetch user data
+  Future<void> startFetchUserData(BuildContext context, String uid) async {
+    try {
+      await _authController.fetchUserData(context, uid).then((value) {
+        if (value != null) {
+          _userModel = value;
+          notifyListeners();
+        } else {
+          AlertHelper.showAlert(context, "Error fetching user data");
+        }
+      });
+    } catch (e) {
+      Logger().e(e);
+    }
+  }
+
+  //----pick, upload and update user profile image
+  // image picker object
+  final ImagePicker picker = ImagePicker();
+
+  // file object to store picked file
+  File _image = File("");
+
+  //getter for picked file
+  File get image => _image;
+
+  // pick an image function
+  Future<void> selectImage(BuildContext context) async {
+    try {
+      // Pick an image.
+      final XFile? pickedFile =
+          await picker.pickImage(source: ImageSource.gallery);
+
+      // check if user has picked a file or not
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        notifyListeners();
+
+        // start the loader
+        setLoading(true);
+
+        //start uploading
+        final imgUrl = await _authController.uploadAndUpdateProfileImage(
+            _image, _userModel!.uid);
+
+        // if url is not empty, that means the file is uploaded successfully
+        if (imgUrl != "") {
+          //clear the file object
+          _image = File("");
+
+          //update the user model image field
+          _userModel!.img = imgUrl;
+
+          notifyListeners();
+
+          //stop the loader
+          setLoading(false);
+        } else {
+          AlertHelper.showAlert(context, "error uploading the image");
+        }
+      } else {
+        Logger().w("no image selected");
+      }
+    } catch (e) {
+      Logger().e(e);
     }
   }
 }

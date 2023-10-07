@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grocery_app/controllers/file_upload_controller.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:grocery_app/utils/helper/alert_helper.dart';
 import 'package:logger/logger.dart';
+
+import '../models/user_model.dart';
 
 class AuthController {
   //sign up user
@@ -77,6 +82,55 @@ class AuthController {
       AlertHelper.showAlert(context, e.code);
     } catch (e) {
       AlertHelper.showAlert(context, e.toString());
+    }
+  }
+
+  // fetch userdata from cloudfirestore
+  Future<UserModel?> fetchUserData(BuildContext context, String uid) async {
+    try {
+      //firebase query that find and fetch user data according to uid
+      DocumentSnapshot documentSnapshot = await users.doc(uid).get();
+
+      if (documentSnapshot.exists) {
+        Logger().w(documentSnapshot.data());
+
+        UserModel model =
+            UserModel.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+        return model;
+      } else {
+        Logger().e("no data found");
+        return null;
+      }
+    } catch (e) {
+      Logger().e(e);
+      return null;
+    }
+  }
+
+  //file upload controller object
+  final FileUploadController _fileUploadController = FileUploadController();
+
+  // upload picked image file to firebase storage and then update the download url in user`s data
+  Future<String> uploadAndUpdateProfileImage(File file, String uid) async {
+    try {
+      //start uploading
+      final String downloadUrl =
+          await _fileUploadController.uploadFile(file, "userImages");
+
+      //check if the download url is empty or not
+      if (downloadUrl != "") {
+        //update the image field of the current user data
+        await users.doc(uid).update({
+          "img": downloadUrl,
+        });
+        return downloadUrl;
+      } else {
+        Logger().e("download url is empty");
+        return "";
+      }
+    } catch (e) {
+      Logger().e(e);
+      return "";
     }
   }
 }
