@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_text.dart';
+import 'package:grocery_app/models/product_model.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screens/main/product_details/product_details.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
@@ -63,27 +65,38 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 19,
-          mainAxisSpacing: 44,
-        ),
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ProductTile();
-        },
-      ),
-    );
+    return Expanded(child: Consumer<ProductProvider>(
+      builder: (context, value, child) {
+        return value.isLoading
+            ? Center(child: const CircularProgressIndicator())
+            : value.products.isEmpty
+                ? Center(child: const CustomText("No Products"))
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.75,
+                      crossAxisSpacing: 19,
+                      mainAxisSpacing: 44,
+                    ),
+                    itemCount: value.products.length,
+                    itemBuilder: (context, index) {
+                      return ProductTile(
+                        model: value.products[index],
+                      );
+                    },
+                  );
+      },
+    ));
   }
 }
 
 class ProductTile extends StatelessWidget {
   const ProductTile({
     super.key,
+    required this.model,
   });
+
+  final ProductModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +107,13 @@ class ProductTile extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.amber,
+          color: Colors.grey,
           borderRadius: BorderRadius.circular(12),
-          image: const DecorationImage(
-            image: AssetImage(AssetsConstants.pumpkin),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(
+              model.img,
+            ),
           ),
         ),
         child: Column(
@@ -127,13 +143,13 @@ class ProductTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomText(
-                    "pumpkin",
+                    model.productName,
                     fontSize: 15,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                   CustomText(
-                    "\$10.5",
+                    "Rs.${model.price}.00",
                     fontSize: 15,
                     color: Colors.black,
                     fontWeight: FontWeight.w500,

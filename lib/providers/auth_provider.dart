@@ -4,11 +4,13 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/controllers/auth_controller.dart';
+import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screens/auth/signup.dart';
 import 'package:grocery_app/screens/main/main_screen.dart';
 import 'package:grocery_app/utils/helper/alert_helper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
 
@@ -83,12 +85,20 @@ class AuthProvider extends ChangeNotifier {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         Logger().w('User is currently signed out!');
+
+        //if the user is null, send to the signup
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Signup()));
       } else {
         await startFetchUserData(context, user.uid).then(
           (value) {
             Logger().w('User is signed in!');
+
+            //start fetch product list
+            Provider.of<ProductProvider>(context, listen: false)
+                .startFetchProductList();
+
+            //if the user is not null, send to the home
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => MainScreen()));
           },

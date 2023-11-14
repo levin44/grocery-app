@@ -4,6 +4,7 @@ import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
 import 'package:grocery_app/controllers/auth_controller.dart';
+import 'package:grocery_app/providers/admin_provider.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
 import 'package:grocery_app/screens/auth/login.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
@@ -12,14 +13,14 @@ import 'package:grocery_app/utils/helper/alert_helper.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({super.key});
+class Admin extends StatefulWidget {
+  const Admin({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<Admin> createState() => _AdminState();
 }
 
-class _SignupState extends State<Signup> {
+class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -33,65 +34,66 @@ class _SignupState extends State<Signup> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 52),
-                CustomText(
-                  'SignUp',
-                  fontSize: 25,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primaryColor,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 41),
-                Image.asset(
-                  AssetsConstants.logo,
-                  width: 202,
-                  height: 138,
-                ),
-                SizedBox(height: 21),
-                customTextfield(
-                  controller: Provider.of<AuthProvider>(context).name,
-                  hintText: 'Name',
-                ),
-                SizedBox(height: 8),
-                customTextfield(
-                  controller: Provider.of<AuthProvider>(context).email,
-                  hintText: 'Email',
-                ),
-                SizedBox(height: 8),
-                customTextfield(
-                  controller: Provider.of<AuthProvider>(context).password,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-                SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Login()));
-                    },
-                    child: CustomText(
-                      'Already have an account?',
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                    ),
+                const BackButton(),
+                Center(
+                  child: CustomText(
+                    'Admin Section',
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryColor,
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 29),
-                Consumer<AuthProvider>(
+                SizedBox(height: 21),
+                Center(child: Consumer<AdminProvider>(
                   builder: (context, value, child) {
-                    return CustomButton(
-                      isLoading: value.isLoading,
-                      onTap: () {
-                        value.startSignup(context);
-                      },
-                      text: "SignUp",
+                    return value.pImage.path == ""
+                        ? IconButton(
+                            onPressed: () => value.selectProductImage(context),
+                            icon: Icon(
+                              Icons.photo,
+                              size: 50,
+                            ),
+                          )
+                        : InkWell(
+                            onTap: () => value.selectProductImage(context),
+                            child: Image.file(
+                              value.pImage,
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                  },
+                )),
+                SizedBox(height: 21),
+                customTextfield(
+                  controller: Provider.of<AdminProvider>(context).pName,
+                  hintText: 'Enter the product name',
+                ),
+                SizedBox(height: 8),
+                customTextfield(
+                  controller: Provider.of<AdminProvider>(context).productDes,
+                  hintText: 'Enter the product description',
+                ),
+                SizedBox(height: 8),
+                customTextfield(
+                  controller: Provider.of<AdminProvider>(context).price,
+                  hintText: 'Enter the product price',
+                ),
+                SizedBox(height: 29),
+                Consumer<AdminProvider>(
+                  builder: (context, value, child) {
+                    return Center(
+                      child: CustomButton(
+                        isLoading: value.isLoading,
+                        onTap: () {
+                          value.startSaveProductData(context);
+                        },
+                        text: "Save Product",
+                      ),
                     );
                   },
                 ),

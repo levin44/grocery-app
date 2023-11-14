@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
+import 'package:grocery_app/screens/admin/admin.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:provider/provider.dart';
@@ -61,11 +62,19 @@ class _ProfileState extends State<Profile> {
                   fontSize: 13,
                   color: AppColors.lightblue,
                 ),
-                SizedBox(height: 200),
+                SizedBox(height: 150),
                 CustomButton(
                   onTap: () => Provider.of<AuthProvider>(context, listen: false)
                       .logOut(),
                   text: "Logout",
+                ),
+                SizedBox(height: 8),
+                CustomButton(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Admin()));
+                  },
+                  text: "Admin Section",
                 )
               ],
             );
