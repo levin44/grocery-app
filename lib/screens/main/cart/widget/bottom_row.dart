@@ -3,8 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/dialogbox_content.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
+import 'package:provider/provider.dart';
 
 class BottomRow extends StatelessWidget {
   const BottomRow({
@@ -14,43 +16,46 @@ class BottomRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CartAmountRow(
-            name: "Item total",
-            amount: "\$20.49",
-          ),
-          CartAmountRow(
-            name: "Discount",
-            amount: "-\$10",
-          ),
-          CartAmountRow(
-            name: "Tax",
-            amount: "\$2",
-          ),
-          CartAmountRow(
-            name: "Total",
-            amount: "\$12.49",
-            isTotal: true,
-          ),
-          SizedBox(height: 20),
-          CustomButton(
-              onTap: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (context) {
-                      return DialogBoxContent();
-                    });
-              },
-              text: "Place order")
-        ],
-      ),
-    );
+        height: 300,
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        child: Consumer<CartProvider>(
+          builder: (context, value, child) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CartAmountRow(
+                  name: "Item total",
+                  amount: value.getCartTotalItemCount.toString(),
+                ),
+                CartAmountRow(
+                  name: "Discount",
+                  amount: "-\$10",
+                ),
+                CartAmountRow(
+                  name: "Tax",
+                  amount: "\$2",
+                ),
+                CartAmountRow(
+                  name: "Total",
+                  amount: "Rs. ${value.getCartTotalPrice}0",
+                  isTotal: true,
+                ),
+                SizedBox(height: 20),
+                CustomButton(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return DialogBoxContent();
+                          });
+                    },
+                    text: "Place order")
+              ],
+            );
+          },
+        ));
   }
 }
 

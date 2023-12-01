@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/firebase_options.dart';
 import 'package:grocery_app/providers/admin_provider.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
 import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screens/splash/splash_screen.dart';
 import 'package:grocery_app/state_management/providers/counter_provider.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => AuthProvider()),
       ChangeNotifierProvider(create: (context) => AdminProvider()),
       ChangeNotifierProvider(create: (context) => ProductProvider()),
+      ChangeNotifierProvider(create: (context) => CartProvider()),
     ],
     child: const MyApp(),
   ));

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/mini_image_tile.dart';
+import 'package:grocery_app/models/cartitem_model.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class CartTile extends StatelessWidget {
   const CartTile({
     super.key,
+    required this.model,
   });
+
+  final CartItemModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +41,30 @@ class CartTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomText(
-                    "Grapes",
+                    model.productModel.productName,
                     fontSize: 14,
                   ),
                   Row(
                     children: [
-                      InkWell(onTap: () {}, child: Icon(Icons.add)),
+                      InkWell(
+                          onTap: () {
+                            Provider.of<CartProvider>(context, listen: false)
+                                .increaseCartItemAmount(model.id);
+                          },
+                          child: Icon(Icons.add)),
                       SizedBox(width: 15),
                       CustomText(
-                        "1",
+                        model.amount.toString(),
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
                       SizedBox(width: 15),
-                      InkWell(onTap: () {}, child: Icon(Icons.remove)),
+                      InkWell(
+                          onTap: () {
+                            Provider.of<CartProvider>(context, listen: false)
+                                .decreaseCartItemAmount(model.id);
+                          },
+                          child: Icon(Icons.remove)),
                     ],
                   ),
                 ],
@@ -59,12 +75,18 @@ class CartTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Icon(
-                Icons.close,
-                color: Colors.red,
+              InkWell(
+                onTap: () {
+                  Provider.of<CartProvider>(context, listen: false)
+                      .removeCartItem(model.id);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
               ),
               CustomText(
-                "152.00",
+                "Rs. ${model.subTotal}",
                 fontSize: 15,
               ),
             ],

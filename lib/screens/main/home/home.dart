@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:grocery_app/components/cart_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/models/product_model.dart';
 import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/providers/cart_provider.dart';
 import 'package:grocery_app/providers/product_provider.dart';
 import 'package:grocery_app/screens/main/product_details/product_details.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
@@ -30,12 +32,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(AssetsConstants.menuIcon),
-                InkWell(
-                  onTap: () {
-                    Provider.of<AuthProvider>(context, listen: false).logOut();
-                  },
-                  child: Image.asset(AssetsConstants.cartIcon),
-                ),
+                CartButton(),
               ],
             ),
             SizedBox(height: 25),
@@ -102,6 +99,13 @@ class ProductTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        //=======get selected product model on clicked
+        Provider.of<ProductProvider>(context, listen: false).setProduct = model;
+
+          // clear the cart counter
+        Provider.of<CartProvider>(context, listen: false).clearAmount();
+
+        // navigate to the product details screen
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => ProductDetails()));
       },
