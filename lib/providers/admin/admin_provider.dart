@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/controllers/admin_controller.dart';
-import 'package:grocery_app/providers/product_provider.dart';
+import 'package:grocery_app/providers/home/product_provider.dart';
 import 'package:grocery_app/utils/helper/alert_helper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';

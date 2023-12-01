@@ -5,9 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/cart_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/models/product_model.dart';
-import 'package:grocery_app/providers/auth_provider.dart';
-import 'package:grocery_app/providers/cart_provider.dart';
-import 'package:grocery_app/providers/product_provider.dart';
+import 'package:grocery_app/providers/auth/auth_provider.dart';
+import 'package:grocery_app/providers/home/cart_provider.dart';
+import 'package:grocery_app/providers/home/product_provider.dart';
 import 'package:grocery_app/screens/main/product_details/product_details.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
@@ -102,7 +102,7 @@ class ProductTile extends StatelessWidget {
         //=======get selected product model on clicked
         Provider.of<ProductProvider>(context, listen: false).setProduct = model;
 
-          // clear the cart counter
+        // clear the cart counter
         Provider.of<CartProvider>(context, listen: false).clearAmount();
 
         // navigate to the product details screen
@@ -125,17 +125,28 @@ class ProductTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: Icon(
-                Icons.favorite_border,
-                color: Colors.black26,
-              ),
-            ),
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Consumer<ProductProvider>(
+                  builder: (context, value, child) {
+                    return InkWell(
+                      onTap: () => value.addToFav(model, context),
+                      child: value.favProducts.contains(model)
+                          ? Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                            )
+                          : Icon(
+                              Icons.favorite_border,
+                              color: Colors.black26,
+                            ),
+                    );
+                  },
+                )),
             Container(
               height: 38,
               padding: EdgeInsets.symmetric(horizontal: 8),

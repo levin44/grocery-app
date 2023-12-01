@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/dialogbox_content.dart';
-import 'package:grocery_app/providers/cart_provider.dart';
+import 'package:grocery_app/providers/home/cart_provider.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:provider/provider.dart';

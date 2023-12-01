@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/models/product_model.dart';
-import 'package:grocery_app/providers/cart_provider.dart';
-import 'package:grocery_app/providers/product_provider.dart';
+import 'package:grocery_app/providers/home/cart_provider.dart';
+import 'package:grocery_app/providers/home/product_provider.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:provider/provider.dart';
 
@@ -45,8 +45,7 @@ class RelatedItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-
-  // clear the cart counter
+        // clear the cart counter
         Provider.of<CartProvider>(context, listen: false).clearAmount();
 
         Provider.of<ProductProvider>(context, listen: false).setProduct = model;
@@ -58,7 +57,7 @@ class RelatedItemTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.amber,
           borderRadius: BorderRadius.circular(12),
-           image: DecorationImage(
+          image: DecorationImage(
             image: NetworkImage(model.img),
             fit: BoxFit.cover,
           ),

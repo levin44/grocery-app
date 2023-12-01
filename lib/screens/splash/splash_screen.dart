@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_text.dart';
-import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/providers/auth/auth_provider.dart';
 import 'package:grocery_app/screens/auth/forgot_password.dart';
 import 'package:grocery_app/screens/auth/login.dart';
 import 'package:grocery_app/screens/auth/signup.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
-import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/providers/auth/auth_provider.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:provider/provider.dart';

@@ -4,7 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/controllers/auth_controller.dart';
-import 'package:grocery_app/providers/product_provider.dart';
+import 'package:grocery_app/providers/home/product_provider.dart';
 import 'package:grocery_app/screens/auth/signup.dart';
 import 'package:grocery_app/screens/main/main_screen.dart';
 import 'package:grocery_app/utils/helper/alert_helper.dart';
@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user_model.dart';
+import '../../models/user_model.dart';
 
 class AuthProvider extends ChangeNotifier {
   AuthController _authController = AuthController();

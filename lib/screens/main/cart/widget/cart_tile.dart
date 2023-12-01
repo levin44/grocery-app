@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/mini_image_tile.dart';
 import 'package:grocery_app/models/cartitem_model.dart';
-import 'package:grocery_app/providers/cart_provider.dart';
+import 'package:grocery_app/providers/home/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class CartTile extends StatelessWidget {

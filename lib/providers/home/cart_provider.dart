@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/cartitem_model.dart';
@@ -58,8 +59,11 @@ class CartProvider extends ChangeNotifier {
       clearAmount();
 
       //show an alert
-      AlertHelper.showAlert(context, "Increased the product amount",
-          type: DialogType.success);
+      AlertHelper.showSnakBar(
+        context,
+        "Increased the product amount",
+        type: AnimatedSnackBarType.success,
+      );
 
       notifyListeners();
     } else {
@@ -74,8 +78,11 @@ class CartProvider extends ChangeNotifier {
       clearAmount();
 
       //show an alert
-      AlertHelper.showAlert(context, "Added to the cart",
-          type: DialogType.success);
+      AlertHelper.showSnakBar(
+        context,
+        "Added to the cart!",
+        type: AnimatedSnackBarType.success,
+      );
 
       Logger().w(_cartItems.length);
 

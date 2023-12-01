@@ -16,13 +16,14 @@ class CartItemModel {
     required this.productModel,
   });
 
- //bind json data to usermodel
+  //bind json data to usermodel
   factory CartItemModel.fromJson(Map<String, dynamic> map) {
     return CartItemModel(
       id: map['id'] as String,
       amount: map['amount'] as int,
       subTotal: map['subTotal'] as double,
-      productModel: ProductModel.fromJson(map['productModel'] as Map<String, dynamic>),
+      productModel:
+          ProductModel.fromJson(map['productModel'] as Map<String, dynamic>),
     );
   }
 
@@ -34,6 +35,4 @@ class CartItemModel {
       'productModel': productModel.toJson(),
     };
   }
-
- 
 }

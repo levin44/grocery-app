@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/mini_image_tile.dart';
-import 'package:grocery_app/providers/cart_provider.dart';
+import 'package:grocery_app/providers/home/cart_provider.dart';
 import 'package:grocery_app/screens/main/cart/widget/bottom_row.dart';
 import 'package:grocery_app/screens/main/cart/widget/cart_tile.dart';
 import 'package:grocery_app/utils/constants/app_colors.dart';

@@ -1,6 +1,8 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/controllers/admin_controller.dart';
 import 'package:grocery_app/models/product_model.dart';
+import 'package:grocery_app/utils/helper/alert_helper.dart';
 
 import 'package:logger/logger.dart';
 
@@ -68,5 +70,35 @@ class ProductProvider extends ChangeNotifier {
     }
 
     return temp;
+  }
+
+  //add to favorite
+
+  // to store fav products
+  final List<ProductModel> _favProducts = [];
+  //getter fav products
+  List<ProductModel> get favProducts => _favProducts;
+
+  //add to fav method
+  void addToFav(ProductModel model, BuildContext context) {
+//first check whether this product is already in the product list
+    if (_favProducts.contains(model)) {
+      _favProducts.remove(model);
+      //show snakbar
+      AlertHelper.showSnakBar(
+        context,
+        "removed from favorites!",
+      );
+
+      notifyListeners();
+    } else {
+      _favProducts.add(model);
+
+      //show snakbar
+      AlertHelper.showSnakBar(context, "Added to favorites!",
+          type: AnimatedSnackBarType.success);
+
+      notifyListeners();
+    }
   }
 }

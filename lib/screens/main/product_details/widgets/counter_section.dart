@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/components/custom_text.dart';
-import 'package:grocery_app/providers/cart_provider.dart';
+import 'package:grocery_app/providers/home/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class CounterSection extends StatelessWidget {

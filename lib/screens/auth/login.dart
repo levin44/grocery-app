@@ -3,7 +3,7 @@ import 'package:flutter_social_button/flutter_social_button.dart';
 import 'package:grocery_app/components/custom_button.dart';
 import 'package:grocery_app/components/custom_text.dart';
 import 'package:grocery_app/components/custom_textfield.dart';
-import 'package:grocery_app/providers/auth_provider.dart';
+import 'package:grocery_app/providers/auth/auth_provider.dart';
 import 'package:grocery_app/screens/auth/forgot_password.dart';
 import 'package:grocery_app/screens/auth/signup.dart';
 import 'package:grocery_app/screens/main/main_screen.dart';

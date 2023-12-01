@@ -6,7 +6,7 @@ import 'package:grocery_app/utils/constants/app_colors.dart';
 import 'package:grocery_app/utils/constants/assets_constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/auth_provider.dart';
+import '../../../providers/auth/auth_provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
